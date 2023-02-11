@@ -32,6 +32,8 @@ public class Table {
         // looop over all the words to find
         for (int x = 0; x < wordsToFind.size(); x++) {
             Word word = wordsToFind.get(x);
+            // checks that the word is not already in the table
+            if (word.isInTable()) continue;
             Boolean done = false;
             //creates a list of random column indexes
             List<Integer> columnIndexes = IntStream.rangeClosed(0, area[0].length -1)
@@ -52,9 +54,9 @@ public class Table {
                         break;
                     }
                 }
-                // add word characters in the table depending on orientation (frontward/backwards)
+                // add word characters in the table depending on arrangement (frontward/backwards)
                 if (enoughRoom && notTaken) {
-                    if (word.getOrientation() == 0) {
+                    if (word.getArrangement() == 0) {
                         int a = 0;
                         for (int i = randomRow; i < randomRow + word.getWordLength(); i++) {
                             area[i][randomColumn] = word.getWordChars()[a];
@@ -67,6 +69,8 @@ public class Table {
                             a--;
                         }
                     }
+                    int[] startPosition = {randomRow, randomColumn};
+                    word.setStartPosition(startPosition);
                     done = true;
                     break;
                 }
@@ -80,7 +84,7 @@ public class Table {
                 int space = 0;
                 int matchingWords = 0;
                 int spaceAfterMatch = 0;
-                boolean orientationSet = false;
+                boolean arrangementSet = false;
                 // loops over rows
                 for (int i = 0; i < area.length; i++) {
                     // checks for valid space to insert word
@@ -91,16 +95,16 @@ public class Table {
                         if (area[i][randomColumn] == Character.MIN_VALUE) {
                             space++;
                             if (matchingWords > 0) spaceAfterMatch++;
-                        } else if ((ascendingWordMatch && !orientationSet) || (ascendingWordMatch && word.getOrientation() == 0)) {
+                        } else if ((ascendingWordMatch && !arrangementSet) || (ascendingWordMatch && word.getArrangement() == 0)) {
                             if (!descendingWordMatch) {
-                                word.setOrientation(0);
-                                orientationSet = true;
+                                word.setArrangement(0);
+                                arrangementSet = true;
                             }
                             matchingWords++;
-                        } else if ((descendingWordMatch && !orientationSet) || (descendingWordMatch && word.getOrientation() == 1)) {
+                        } else if ((descendingWordMatch && !arrangementSet) || (descendingWordMatch && word.getArrangement() == 1)) {
                             if (!ascendingWordMatch) {
-                                word.setOrientation(1);
-                                orientationSet = true;
+                                word.setArrangement(1);
+                                arrangementSet = true;
                             }
                             matchingWords++;
                         } else {
@@ -108,9 +112,9 @@ public class Table {
                             matchingWords = 0;
                             spaceAfterMatch = 0;
                         }
-                    // inserts word over valid space depending on orientation
+                    // inserts word over valid space depending on arrangement
                     } else {
-                        if (word.getOrientation() == 0) {
+                        if (word.getArrangement() == 0) {
                             int a = word.getWordLength() - 1;
                             for (int o = i; o > i - word.getWordLength(); o--) {
                                 area[o][randomColumn] = word.getWordChars()[a];
@@ -123,6 +127,9 @@ public class Table {
                                 a++;
                             }
                         }
+                        int[] startPosition = {i, randomColumn};
+                        word.setStartPosition(startPosition);
+                        done = true;
                         break;
                     }
                 }
@@ -134,6 +141,8 @@ public class Table {
         // looop over all the words to find
         for (int x = 0; x < wordsToFind.size(); x++) {
             Word word = wordsToFind.get(x);
+            // checks that the word is not already in the table
+            if (word.isInTable()) continue;
             Boolean done = false;
             //creates a list of random row indexes
             List<Integer> rowIndexes = IntStream.rangeClosed(0, area.length -1)
@@ -154,9 +163,9 @@ public class Table {
                         break;
                     }
                 }
-                // add word characters in the table depending on orientation (frontward/backwards)
+                // add word characters in the table depending on arragement (forwards/backwards)
                 if (enoughRoom && notTaken) {
-                    if (word.getOrientation() == 0) {
+                    if (word.getArrangement() == 0) {
                         int a = 0;
                         for (int i = randomColumn; i < randomColumn + word.getWordLength(); i++) {
                             area[randomRow][i] = word.getWordChars()[a];
@@ -169,6 +178,8 @@ public class Table {
                             a--;
                         }
                     }
+                    int[] startPosition = {randomRow, randomColumn};
+                    word.setStartPosition(startPosition);
                     done = true;
                     break;
                 }
@@ -182,7 +193,7 @@ public class Table {
                 int space = 0;
                 int matchingWords = 0;
                 int spaceAfterMatch = 0;
-                boolean orientationSet = false;
+                boolean arrangementSet = false;
                 // loops over columns
                 for (int i = 0; i < area[randomRow].length; i++) {
                     // checks for valid space to insert word
@@ -193,16 +204,16 @@ public class Table {
                         if (area[randomRow][i] == Character.MIN_VALUE) {
                             space++;
                             if (matchingWords > 0) spaceAfterMatch++;
-                        } else if ((ascendingWordMatch && !orientationSet) || (ascendingWordMatch && word.getOrientation() == 0)) {
+                        } else if ((ascendingWordMatch && !arrangementSet) || (ascendingWordMatch && word.getArrangement() == 0)) {
                             if (!descendingWordMatch) {
-                                word.setOrientation(0);
-                                orientationSet = true;
+                                word.setArrangement(0);
+                                arrangementSet = true;
                             }
                             matchingWords++;
-                        } else if ((descendingWordMatch && !orientationSet) || (descendingWordMatch && word.getOrientation() == 1)) {
+                        } else if ((descendingWordMatch && !arrangementSet) || (descendingWordMatch && word.getArrangement() == 1)) {
                             if (!ascendingWordMatch) {
-                                word.setOrientation(1);
-                                orientationSet = true;
+                                word.setArrangement(1);
+                                arrangementSet = true;
                             }
                             matchingWords++;
                         } else {
@@ -210,9 +221,9 @@ public class Table {
                             matchingWords = 0;
                             spaceAfterMatch = 0;
                         }
-                    // inserts word over valid space depending on orientation
+                    // inserts word over valid space depending on arragement
                     } else {
-                        if (word.getOrientation() == 0) {
+                        if (word.getArrangement() == 0) {
                             int a = word.getWordLength() - 1;
                             for (int o = i; o > i - word.getWordLength(); o--) {
                                 area[randomRow][o] = word.getWordChars()[a];
@@ -225,6 +236,9 @@ public class Table {
                                 a++;
                             }
                         }
+                        int[] startPosition = {randomRow, i};
+                        word.setStartPosition(startPosition);
+                        done = true;
                         break;
                     }
                 }
@@ -242,6 +256,7 @@ public class Table {
 
     private void populatewordsToFind() {
         populateVertically();
+        populateHorizontally();
         fillTheRest();
     }
 

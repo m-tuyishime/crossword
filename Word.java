@@ -4,18 +4,20 @@ import java.util.Arrays;
 
 public class Word {
     private String word;
+    private int arrangement;
     private int orientation;
-    private int position;
-    private ArrayList<Integer> positions = new ArrayList<Integer>(Arrays.asList(0, 1, 2));
+    private ArrayList<Integer> possibleOrientations;
     private boolean found;
+    private int[] startPosition = {Integer.MIN_VALUE, Integer.MIN_VALUE};
 
     private Random rand = new Random();
 
 
     public Word (String word) {
         this.word = word;
-        orientation = rand.nextInt(2);
-        position = positions.get(rand.nextInt(positions.size()));
+        arrangement = rand.nextInt(2); // {0 = forwards, 1 = backwards}
+        possibleOrientations = new ArrayList<Integer>(Arrays.asList(0, 1, 2)); // {0 = horizontal, 1 = vertical, 2 = diagonal}
+        orientation = possibleOrientations.get(rand.nextInt(possibleOrientations.size()));
         found = false;
     }
 
@@ -31,36 +33,55 @@ public class Word {
         return word.toCharArray();
     }
 
-    public int getOrientation() {
-        return orientation;
+    public int getArrangement() {
+        return arrangement;
     }
 
-    public int getPosition() {
-        return position;
+    public int getOrientation() {
+        return orientation;
     }
 
     public boolean getFoundStatus() {
         return found;
     }
 
-    public void setFoundStatus(boolean found) {
-        this.found = found;
+    public int[] getStartPosition() {
+        return startPosition;
     }
 
-    public void setOrientation(int orientation) {
-        this.orientation = orientation;
+    public boolean isInTable() {
+        if (startPosition[0] == Integer.MIN_VALUE && startPosition[1] == Integer.MIN_VALUE) 
+            return false;
+        return true;
     }
 
-    public void changeOrientation() {
-        if (orientation == 0) orientation = 1;
-        else orientation = 0;
+    public void setArrangement(int arrangement) {
+        if (arrangement < 0 || arrangement > 1)
+            throw new IllegalArgumentException("arrangement must be 0 (forwards) or 1 (backwards)");
+        this.arrangement = arrangement;
     }
 
-    public int changePosition() {
-        if (positions.size() < 1) {
-            positions.remove(Integer.valueOf(position));
-            position = positions.get(rand.nextInt(positions.size()));
-            return position;
+    public void setStartPosition(int[] startPosition) {
+        if (startPosition.length != 2)
+            throw new IllegalArgumentException("startPosition array must be of size 2");
+        this.startPosition[0] = startPosition[0];
+        this.startPosition[1] = startPosition[1];
+    }
+
+    public void changeFoundStatus() {
+        found = !found;
+    }
+
+    public void changeArrangement() {
+        if (arrangement == 0) arrangement = 1;
+        else arrangement = 0;
+    }
+
+    public int changeOrientation() {
+        if (possibleOrientations.size() < 1) {
+            possibleOrientations.remove(Integer.valueOf(orientation));
+            orientation = possibleOrientations.get(rand.nextInt(possibleOrientations.size()));
+            return orientation;
         } else {
             return -1;
         }
