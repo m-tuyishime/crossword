@@ -232,8 +232,17 @@ public class Table {
         }
     }
 
+    private void fillTheRest() {
+        for (int o = 0; o < area.length; o++) {
+            for (int i = 0; i < area[o].length; i++) {
+                if (area[o][i] == Character.MIN_VALUE) area[o][i] = 'O';
+            }
+        }
+    }
+
     private void populatewordsToFind() {
         populateVertically();
+        fillTheRest();
     }
 
     public void printTable() {
