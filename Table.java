@@ -33,7 +33,7 @@ public class Table {
         for (int x = 0; x < wordsToFind.size(); x++) {
             Word word = wordsToFind.get(x);
             // checks that the word is not already in the table
-            if (word.isInTable()) continue;
+            if (word.isInTable() || word.getOrientation() != 1) continue;
             Boolean done = false;
             //creates a list of random column indexes
             List<Integer> columnIndexes = IntStream.rangeClosed(0, area[0].length -1)
@@ -142,7 +142,7 @@ public class Table {
         for (int x = 0; x < wordsToFind.size(); x++) {
             Word word = wordsToFind.get(x);
             // checks that the word is not already in the table
-            if (word.isInTable()) continue;
+            if (word.isInTable() || word.getOrientation() != 0) continue;
             Boolean done = false;
             //creates a list of random row indexes
             List<Integer> rowIndexes = IntStream.rangeClosed(0, area.length -1)
