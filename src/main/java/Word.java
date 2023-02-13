@@ -8,7 +8,7 @@ public class Word {
     private int orientation;
     private ArrayList<Integer> possibleOrientations;
     private boolean found;
-    private int[] startPosition = {Integer.MIN_VALUE, Integer.MIN_VALUE};
+    private boolean isInTable;
 
     private Random rand = new Random();
 
@@ -19,6 +19,7 @@ public class Word {
         possibleOrientations = new ArrayList<Integer>(Arrays.asList(0, 1, 2)); // {0 = horizontal, 1 = vertical, 2 = diagonal}
         orientation = possibleOrientations.get(rand.nextInt(possibleOrientations.size()));
         found = false;
+        isInTable = false;
     }
 
     public String getWord() {
@@ -29,8 +30,8 @@ public class Word {
         return word.length();
     }
 
-    public char[] getWordChars() {
-        return word.toCharArray();
+    public char getWordChar(int i) {
+        return word.toCharArray()[i];
     }
 
     public int getArrangement() {
@@ -45,27 +46,18 @@ public class Word {
         return found;
     }
 
-    public int[] getStartPosition() {
-        return startPosition;
+    public boolean isInTable() {
+        return isInTable;
     }
 
-    public boolean isInTable() {
-        if (startPosition[0] == Integer.MIN_VALUE && startPosition[1] == Integer.MIN_VALUE) 
-            return false;
-        return true;
+    public void setInTable() {
+        isInTable = true;
     }
 
     public void setArrangement(int arrangement) {
         if (arrangement < 0 || arrangement > 1)
             throw new IllegalArgumentException("arrangement must be 0 (forwards) or 1 (backwards)");
         this.arrangement = arrangement;
-    }
-
-    public void setStartPosition(int[] startPosition) {
-        if (startPosition.length != 2)
-            throw new IllegalArgumentException("startPosition array must be of size 2");
-        this.startPosition[0] = startPosition[0];
-        this.startPosition[1] = startPosition[1];
     }
 
     public void changeFoundStatus() {
@@ -77,13 +69,10 @@ public class Word {
         else arrangement = 0;
     }
 
-    public int changeOrientation() {
+    public void changeOrientation() {
         if (possibleOrientations.size() < 1) {
             possibleOrientations.remove(Integer.valueOf(orientation));
             orientation = possibleOrientations.get(rand.nextInt(possibleOrientations.size()));
-            return orientation;
-        } else {
-            return -1;
         }
     }
 }

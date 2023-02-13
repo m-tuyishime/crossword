@@ -3,13 +3,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class Column {
     private Coordinates coordinates;
-    private boolean isFree;
     private Word word;
     private char content;
 
     private Column(Coordinates coordinates) {
         this.coordinates = coordinates;
-        isFree = true;
     }
 
     private static final Map<Coordinates, Column> POOL = new ConcurrentHashMap<>();
@@ -23,8 +21,9 @@ public class Column {
         return column;
     }
 
-    public boolean getIsFree() {
-        return isFree;
+    public boolean getIsFree(char charToInsert) {
+        if (content == charToInsert || content == Character.MIN_VALUE) return true;
+        return false;
     }
 
     public Word getWord() {
@@ -35,9 +34,13 @@ public class Column {
         return content;
     }
 
-    public void setContent(Word word, char content) {
+    public void setContent(Word word, int wordIndex) {
         this.word = word;
-        this.content = content;
-        isFree = false;
+        if (content == Character.MIN_VALUE) {
+            if (word != null) {
+                    this.content = word.getWordChar(wordIndex);
+            } else 
+                this.content = 'O';
+        }
     }
 }
