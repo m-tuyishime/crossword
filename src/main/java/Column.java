@@ -1,21 +1,17 @@
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.Random;
 
 public class Column {
-    private Coordinates coordinates;
     private Word word;
     private char content;
-
-    private Column(Coordinates coordinates) {
-        this.coordinates = coordinates;
-    }
 
     private static final Map<Coordinates, Column> POOL = new ConcurrentHashMap<>();
 
     public static Column getInstance(Coordinates coordinates) {
         Column column = POOL.get(coordinates);
         if (column == null) {
-            column = new Column(coordinates);
+            column = new Column();
             POOL.put(coordinates, column);
         }
         return column;
@@ -40,8 +36,12 @@ public class Column {
         if (content == Character.MIN_VALUE) {
             if (word != null) {
                 this.content = word.getWordChar(wordIndex);
-            } else
-                this.content = ' ';
+            } else {
+                Random rand = new Random();
+                char[] alphabet = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q',
+                        'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
+                this.content = alphabet[rand.nextInt(alphabet.length)];
+            }
         }
     }
 }
