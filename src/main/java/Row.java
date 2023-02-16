@@ -6,6 +6,10 @@ public class Row {
     private int size;
 
     public Row(int index, int size) {
+        if (index < 0) 
+            throw new IllegalArgumentException("index must be positive");
+        if (size <= 0)
+            throw new IllegalArgumentException("size must be greater than 0");
         this.index = index;
         this.size = size;
         content = new Column[size];

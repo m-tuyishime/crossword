@@ -12,11 +12,11 @@ public class Word {
 
     private Random rand = new Random();
 
-
-    public Word (String word) {
+    public Word(String word) {
         this.word = word;
         arrangement = rand.nextInt(2); // {0 = forwards, 1 = backwards}
-        possibleOrientations = new ArrayList<Integer>(Arrays.asList(0, 1, 2)); // {0 = horizontal, 1 = vertical, 2 = diagonal}
+        // {0 = horizontal, 1 = vertical, 2 = diagonalLeft, 3=diagonalRight}
+        possibleOrientations = new ArrayList<Integer>(Arrays.asList(0, 1, 2, 3));
         orientation = possibleOrientations.get(rand.nextInt(possibleOrientations.size()));
         found = false;
         isInTable = false;
@@ -65,8 +65,10 @@ public class Word {
     }
 
     public void changeArrangement() {
-        if (arrangement == 0) arrangement = 1;
-        else arrangement = 0;
+        if (arrangement == 0)
+            arrangement = 1;
+        else
+            arrangement = 0;
     }
 
     public void changeOrientation() {

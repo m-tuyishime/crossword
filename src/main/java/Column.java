@@ -22,7 +22,8 @@ public class Column {
     }
 
     public boolean getIsFree(char charToInsert) {
-        if (content == charToInsert || content == Character.MIN_VALUE) return true;
+        if (content == charToInsert || content == Character.MIN_VALUE)
+            return true;
         return false;
     }
 
@@ -38,9 +39,9 @@ public class Column {
         this.word = word;
         if (content == Character.MIN_VALUE) {
             if (word != null) {
-                    this.content = word.getWordChar(wordIndex);
-            } else 
-                this.content = 'O';
+                this.content = word.getWordChar(wordIndex);
+            } else
+                this.content = ' ';
         }
     }
 }
